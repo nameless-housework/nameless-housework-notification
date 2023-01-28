@@ -1,0 +1,69 @@
+{
+  "name": "nameless-housework-notification",
+  "version": "1.0.0",
+  "private": false,
+  "description": "nameless-housework-notification",
+  "keywords": [
+    "chirimen",
+    "iot",
+    "typescript",
+    "ambient",
+    "express",
+    "node-web-i2c"
+  ],
+  "homepage": "https://github.com/nameless-housework/nameless-housework-notification#readme",
+  "bugs": {
+    "url": "https://github.com/nameless-housework/nameless-housework-notification/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nameless-housework/nameless-housework-notification.git"
+  },
+  "license": "MIT",
+  "author": "Motone Adachi",
+  "main": "./src/index.ts",
+  "scripts": {
+    "codegen": "ts-node ./src/tools/ts2gql.ts && graphql-codegen",
+    "commit": "git cz",
+    "doc": "typedoc --plugin typedoc-plugin-markdown --out ./docs/ ./src/*.ts && madge --image ./docs/map.svg ./src/index.ts",
+    "ignore": "curl https://raw.githubusercontent.com/github/gitignore/master/Node.gitignore -o ./.gitignore",
+    "lint": "npm run lint-api && npm run lint-vue",
+    "lint-api": "npx sort-package-json && tsc --noEmit && eslint './src/**/*.ts' --config ./.eslintrc.js --no-ignore --color --fix",
+    "lint-vue": "cd ./vue && npm run lint",
+    "start": "ts-node ./src/index.ts",
+    "test": "echo 'coming soon'",
+    "watch": "nodemon ./src/index.ts"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-emoji"
+    }
+  },
+  "dependencies": {
+    "@chirimen/neopixel-i2c": "^1.0.3",
+    "ambient-lib": "^1.0.4",
+    "express": "^4.18.2",
+    "ngrok": "^4.3.3",
+    "node-web-i2c": "^1.1.23",
+    "ts-node": "^10.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "@typescript-eslint/eslint-plugin": "^5.7.0",
+    "@typescript-eslint/parser": "^5.7.0",
+    "commitizen": "^4.2.4",
+    "cz-emoji": "^1.0.1",
+    "eslint": "^8.4.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "madge": "^5.0.1",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.5.1",
+    "sort-package-json": "^2.2.0",
+    "typedoc-plugin-markdown": "^3.11.14"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}

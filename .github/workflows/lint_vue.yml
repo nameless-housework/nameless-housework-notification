@@ -1,0 +1,24 @@
+name: lint_vue.yml
+
+on:
+  push:
+    paths:
+      - 'vue/**'
+      - '!vue/.gitignore'
+      - '!vue/README.md'
+
+defaults:
+  run:
+    working-directory: vue
+
+jobs:
+  lint:
+    name: lint_vue
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm ci
+      - run: npm run lint
