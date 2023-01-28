@@ -4,9 +4,7 @@ on:
   push:
     paths-ignore:
       - 'vue/**'
-      - '@types/**'
       - 'docs/**'
-      - 'graphql/**'
       - '.gitignore'
       - 'README.md'
 
