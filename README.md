@@ -24,6 +24,17 @@ pi@raspberrypi:~$ node -v
 v18.12.1
 pi@raspberrypi:~$ npm -v
 8.19.2
+pi@raspberrypi:~$ wget -O speedtest-cli https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py
+pi@raspberrypi:~$ chmod +x speedtest-cli
+pi@raspberrypi:~$ ./speedtest-cli
+Retrieving speedtest.net configuration...
+Retrieving speedtest.net server list...
+Selecting best server based on ping...
+Hosted by Rakuten Mobile, Inc (Tokyo) [2.38 km]: 132.094 ms
+Testing download speed................................................................................
+Download: 22.86 Mbit/s
+Testing upload speed......................................................................................................
+Upload: 13.56 Mbit/s
 ```
 
 ## セットアップ&永続化方法
@@ -39,7 +50,7 @@ pi@raspberrypi:~$ npm -v
 1. 会場で配布された及び [forever](https://www.npmjs.com/package/forever) 導入済みの `Raspberry Pi` を起動し当リポジトリをクローンしてください。
 2. リポジトリ内へ移動し、 `example.env` ファイルを参考に環境変数を設定及び `.env` ファイルの作成をしてください。
 3. `Chirimen` の [Neopixel LED](https://tutorial.chirimen.org/pizero/esm-examples/neopixel-i2c/index.html) を参考に配線を行ってください。
-4. `npm i --production` を実行してください。(依存関係構築)(筆者の移動先のスマホのテザリング環境ではその回線速度と `Raspberry Pi` のスペックもあり完了まで6分程要したので気長に待ちましょう。)
+4. `npm i --production` を実行してください。(依存関係構築)(筆者の移動先の環境ではその回線速度と `Raspberry Pi` のスペックもあり完了まで6分程要したので気長に待ちましょう。)
 5. リポジトリ内へ移動し、 `forever start -c "npm run start" ./` を実行してください。※起動&永続化
 6. `Raspberry Pi` に開発者モードを有効にした Android デバイスを接続してください。
 
