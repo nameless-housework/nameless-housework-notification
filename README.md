@@ -42,7 +42,7 @@ Upload: 13.56 Mbit/s
 ### ご注意
 
 - 配布された `Raspberry Pi` には `git` が入ってないので `sudo apt install -y git` を実行されたい。
-- `ssh` などではなく [PiZeroWebSerialConsole](https://chirimen.org/PiZeroWebSerialConsole/PiZeroWebSerialConsole.html) を利用している場合などで `Raspberry Pi` の電源用 USB ポートから充電していない場合は給電してください。(手順の途中で PC 以外のシリアルデータ通信が必要になるデバイスの接続を要するため)
+- `ssh` などではなく [PiZeroWebSerialConsole](https://chirimen.org/PiZeroWebSerialConsole/PiZeroWebSerialConsole.html) を利用している場合などで `Raspberry Pi` の OTG 用 USB ポート(Chirimen で操作する際に使う方)からしか給電していない場合は OTG 用ポートに加えて電源用 USB ポートからも給電してください。(手順の途中で PC 以外のシリアルデータ通信が必要になるデバイスの接続を要するため)
 - `WiFi` などはセットアップ済である前提です。
 
 ### 手順
