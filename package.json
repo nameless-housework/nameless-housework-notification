@@ -41,23 +41,13 @@
   },
   "dependencies": {
     "@chirimen/neopixel-i2c": "^1.0.3",
-    "@graphql-codegen/cli": "^2.6.2",
-    "@graphql-codegen/typescript": "^2.4.8",
-    "@graphql-codegen/typescript-operations": "^2.3.5",
     "ambient-lib": "^1.0.4",
-    "delay": "^5.0.0",
     "express": "^4.18.2",
-    "express-graphql": "^0.12.0",
-    "graphql-import-node": "^0.0.5",
-    "graphql-request": "^5.1.0",
-    "morgan": "^1.10.0",
     "ngrok": "^4.3.3",
     "node-web-i2c": "^1.1.23",
-    "pino": "^7.1.0",
     "ts-node": "^10.6.0"
   },
   "devDependencies": {
-    "@types/morgan": "^1.9.3",
     "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.7.0",

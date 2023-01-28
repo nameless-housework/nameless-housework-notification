@@ -24,5 +24,4 @@ jobs:
         with:
           node-version: '18'
       - run: npm ci
-      - run: echo "npm run codegen"
       - run: npm run lint-api

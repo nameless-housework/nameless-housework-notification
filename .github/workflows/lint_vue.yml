@@ -9,7 +9,7 @@ on:
 
 defaults:
   run:
-    working-directory: src
+    working-directory: vue
 
 jobs:
   lint:
@@ -21,6 +21,4 @@ jobs:
         with:
           node-version: '18'
       - run: npm ci
-      - run: echo "npm run codegen"
-      - run: echo "cd ../vue && npm ci"
-      - run: echo "npm run lint-vue"
+      - run: npm run lint
