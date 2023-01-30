@@ -6,13 +6,13 @@ import ngrok from 'ngrok';
 // import NPIX from '@chirimen/neopixel-i2c';
 // import ambient from 'ambient-lib';
 
-import { PORT, NGROK_AUTH_TOKEN } from './constants/constant';
+import { PORT, NGROK_AUTH_TOKEN, WEB_GUI_URL } from './constants/constant';
 
 const SYSTEM = { ngrokUrl: '' };
 const app = express();
 
 app.get('/', (req: express.Request, res: express.Response) => {
-  res.redirect(`https://nameless-housework.github.io/nameless-housework-notification?api=${SYSTEM.ngrokUrl}`);
+  res.redirect(`${WEB_GUI_URL}/?api=${SYSTEM.ngrokUrl}`);
 });
 
 (async () => {
