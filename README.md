@@ -41,7 +41,7 @@ Upload: 13.56 Mbit/s
 
 ### ご注意
 
-- 配布された `Raspberry Pi` には `git` が入ってないので `sudo apt install -y git` を実行されたい。
+- 配布された `Raspberry Pi` には `git` が入ってないので `sudo apt install -y git` を実行してください。必要に応じて`sudo apt-get update`も行ってください。
 - `ssh` などではなく [PiZeroWebSerialConsole](https://chirimen.org/PiZeroWebSerialConsole/PiZeroWebSerialConsole.html) を利用している場合などで `Raspberry Pi` の OTG 用 USB ポート(Chirimen で操作する際に使う方)からしか給電していない場合は OTG 用ポートに加えて電源用 USB ポートからも給電してください。(手順の途中で PC 以外のシリアルデータ通信が必要になるデバイスの接続を要するため)
 - `WiFi` などはセットアップ済である前提です。
 - 配布された `Raspberry Pi Zero WH` に `USB Hub (MicroB to USB-A * 2つ以上)` `USB Audio Interface` と `USB-A to TypeC ケーブル` を接続してください。(`USB-A to TypeC ケーブル` についてはスマホ側のインターフェースに応じて変更してください。)(或いは `Raspberry Pi 4` などを利用してください。)
