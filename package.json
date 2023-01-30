@@ -42,12 +42,14 @@
   "dependencies": {
     "@chirimen/neopixel-i2c": "^1.0.3",
     "ambient-lib": "^1.0.4",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "ngrok": "^4.3.3",
     "node-web-i2c": "^1.1.23",
     "ts-node": "^10.6.0"
   },
   "devDependencies": {
+    "@types/express": "^4.17.16",
     "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.7.0",
