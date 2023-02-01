@@ -64,7 +64,7 @@ app.put(
     db.CONTENTS[name].about = req.params.about;
     db.saveToFile();
 
-    res.status(200).json({ message: 'saved!' });
+    res.status(200).json({ message: 'saved!', saved: db.CONTENTS });
   }
 );
 
