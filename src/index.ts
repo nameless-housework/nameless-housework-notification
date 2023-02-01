@@ -40,7 +40,7 @@ app.put(
       res.status(422).json({ message: 'plz set true or false to active' });
       return;
     }
-    if (req.params.threshold.match(/^(-|\+|)\d+$/)) {
+    if (!req.params.threshold.match(/^(-|\+|)\d+$/)) {
       res.status(422).json({ message: 'plz set number to threshold' });
       return;
     }
@@ -52,7 +52,7 @@ app.put(
       res.status(422).json({ message: 'plz set over or less to over_or_less' });
       return;
     }
-    if (req.params.about) {
+    if (!req.params.about) {
       res.status(422).json({ message: 'plz set text to about' });
       return;
     }
