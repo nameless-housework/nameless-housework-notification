@@ -1,0 +1,50 @@
+{
+  "d1": {
+    "active": true,
+    "about": "選択済みタオル枚数が減ったとき(箱の天井との距離が220以上のとき)",
+    "threshold": 220,
+    "over_or_less": "over"
+  },
+  "d2": {
+    "active": true,
+    "about": "選択済みタオル枚数が減ったとき(タオル重量が360以下のとき)",
+    "threshold": 360,
+    "over_or_less": "less"
+  },
+  "d3": {
+    "active": false,
+    "about": "",
+    "threshold": 0,
+    "over_or_less": ""
+  },
+  "d4": {
+    "active": false,
+    "about": "",
+    "threshold": 0,
+    "over_or_less": ""
+  },
+  "d5": {
+    "active": false,
+    "about": "",
+    "threshold": 0,
+    "over_or_less": ""
+  },
+  "d6": {
+    "active": false,
+    "about": "",
+    "threshold": 0,
+    "over_or_less": ""
+  },
+  "d7": {
+    "active": false,
+    "about": "",
+    "threshold": 0,
+    "over_or_less": ""
+  },
+  "d8": {
+    "active": false,
+    "about": "",
+    "threshold": 0,
+    "over_or_less": ""
+  }
+}
