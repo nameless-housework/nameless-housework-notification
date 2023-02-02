@@ -59,3 +59,7 @@ Upload: 13.56 Mbit/s
 ### データ保存先について
 
 coming soon...
+
+### 参考資料
+UI 原案
+https://docs.google.com/presentation/d/1l1uFxEWqwzjOd0DtrfqyM6lvdam2THb44EaPcrWz84Y/edit#slide=id.p

@@ -43,7 +43,7 @@
           <el-col :span="16">
             <el-input type="textarea" v-model="data.about" />
           </el-col>
-          <el-col :span="4" @click="save(key)">
+          <el-col :span="4" @click="save">
             <el-icon :size="30"><UploadFilled /></el-icon><br />
           </el-col>
         </el-row>
@@ -80,16 +80,16 @@ export default defineComponent({
       lang: 'jp',
       sensor: {
         d1: {
-          active: true,
-          about: '選択済みタオル枚数が減ったとき(箱の天井との距離が220以上のとき)',
-          threshold: 220,
-          over_or_less: 'less',
+          active: false,
+          about: '',
+          threshold: 0,
+          over_or_less: '',
         },
         d2: {
-          active: true,
-          about: '選択済みタオル枚数が減ったとき(タオル重量が360以下のとき)',
-          threshold: 360,
-          over_or_less: 'less',
+          active: false,
+          about: '',
+          threshold: 0,
+          over_or_less: '',
         },
         d3: {
           active: false,
@@ -129,9 +129,11 @@ export default defineComponent({
         },
       },
     });
-    const save = (key: string) => {
-      notification.success({ title: '成功', message: `${key}を保存しました` });
+
+    const save = () => {
+      notification.success({ title: '成功', message: '保存しました' });
     };
+
     const lagnChange = () => {
       notification.success({ title: '成功', message: `言語を${state.lang}に変更しました` });
     };
@@ -171,7 +173,6 @@ export default defineComponent({
 #lang {
   width: 50px;
 }
-
 .left {
   text-align: left;
 }
