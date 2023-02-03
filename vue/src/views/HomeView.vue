@@ -49,7 +49,7 @@
           <el-col :span="16">
             <el-input type="textarea" v-model="data.about" />
           </el-col>
-          <el-col :span="4" @click="save">
+          <el-col :span="4" @click="save(key)">
             <el-icon :size="30"><UploadFilled /></el-icon><br />
             <small>保存</small><br />
           </el-col>
@@ -80,7 +80,7 @@ import { TrendCharts, UploadFilled, Memo } from '@element-plus/icons-vue';
 const ENDPOINT = location.search.split(/api=|&/)[1];
 
 // api client
-import { Client, GetAllRes } from '@/api/client';
+import { Client, GetAllRes, OverOrLess } from '@/api/client';
 
 // components
 import * as notification from '@/components/notification';
@@ -100,49 +100,49 @@ export default defineComponent({
           active: false,
           about: '',
           threshold: 0,
-          over_or_less: '',
+          over_or_less: '' as OverOrLess,
         },
         d2: {
           active: false,
           about: '',
           threshold: 0,
-          over_or_less: '',
+          over_or_less: '' as OverOrLess,
         },
         d3: {
           active: false,
           about: '',
           threshold: 0,
-          over_or_less: '',
+          over_or_less: '' as OverOrLess,
         },
         d4: {
           active: false,
           about: '',
           threshold: 0,
-          over_or_less: '',
+          over_or_less: '' as OverOrLess,
         },
         d5: {
           active: false,
           about: '',
           threshold: 0,
-          over_or_less: '',
+          over_or_less: '' as OverOrLess,
         },
         d6: {
           active: false,
           about: '',
           threshold: 0,
-          over_or_less: '',
+          over_or_less: '' as OverOrLess,
         },
         d7: {
           active: false,
           about: '',
           threshold: 0,
-          over_or_less: '',
+          over_or_less: '' as OverOrLess,
         },
         d8: {
           active: false,
           about: '',
           threshold: 0,
-          over_or_less: '',
+          over_or_less: '' as OverOrLess,
         },
       },
     });
@@ -166,7 +166,16 @@ export default defineComponent({
       reflectResToState(res);
     })();
 
-    const save = () => {
+    const save = async (key: 'd1' | 'd2' | 'd3' | 'd4' | 'd5' | 'd6' | 'd7' | 'd8') => {
+      if (!state.sensor[key].about) {
+        notification.error({ title: 'エラー', message: 'メモを入力してください' });
+        return;
+      }
+      if (!state.sensor[key].over_or_less) {
+        notification.error({ title: 'エラー', message: '以上/以下を入力してください' });
+        return;
+      }
+      await client.updateSensor({ name: key, ...state.sensor[key] });
       notification.success({ title: '成功', message: '保存しました' });
     };
 
@@ -186,7 +195,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" module>
-$WIDTH: 375px;
+$WIDTH: 336px;
 
 #parent {
   width: $WIDTH;
@@ -215,7 +224,7 @@ $WIDTH: 375px;
 }
 
 #ambient {
-  margin-right: 78px;
+  margin-right: 40px;
 }
 
 #lang {
