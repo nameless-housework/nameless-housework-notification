@@ -41,7 +41,6 @@
   },
   "dependencies": {
     "@chirimen/neopixel-i2c": "^1.0.3",
-    "ambient-lib": "^1.0.4",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "ngrok": "^4.3.3",
