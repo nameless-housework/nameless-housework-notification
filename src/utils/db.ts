@@ -1,7 +1,8 @@
 import fs from 'fs';
 import { DB_PATH } from '../constants/constant';
+import { Configs } from '../@types/db';
 
-export const CONTENTS = {
+export const CONTENTS: Configs = {
   lang: 'jp',
   sensor: {
     d1: {
@@ -54,17 +55,6 @@ export const CONTENTS = {
     },
   },
 };
-export const SENSOR_NAMES = Object.keys(CONTENTS.sensor);
-
-export const LANG = {
-  JP: 'jp',
-  EK: 'ek',
-} as const;
-
-export const COMPARISON = {
-  OVER: 'over',
-  LESS: 'less',
-} as const;
 
 export const initFileIfNotExists = () => {
   if (fs.existsSync(DB_PATH)) {
@@ -86,7 +76,7 @@ export const reflectFromFile = () => {
   CONTENTS.sensor.d8 = draft.sensor.d8;
 };
 
-export const saveToFile = (draft?: typeof CONTENTS) => {
+export const saveToFile = (draft?: Configs) => {
   if (draft) {
     fs.writeFileSync(DB_PATH, JSON.stringify(draft, null, 2));
     return;

@@ -1,60 +1,5 @@
 import axios from 'axios';
-
-export type OverOrLess = 'over' | 'less';
-
-export type GetAllRes = {
-  lang: 'jp' | 'en';
-  sensor: {
-    d1: {
-      active: boolean;
-      about: string;
-      threshold: number;
-      over_or_less: OverOrLess;
-    };
-    d2: {
-      active: boolean;
-      about: string;
-      threshold: number;
-      over_or_less: OverOrLess;
-    };
-    d3: {
-      active: boolean;
-      about: string;
-      threshold: number;
-      over_or_less: OverOrLess;
-    };
-    d4: {
-      active: boolean;
-      about: string;
-      threshold: number;
-      over_or_less: OverOrLess;
-    };
-    d5: {
-      active: boolean;
-      about: string;
-      threshold: number;
-      over_or_less: OverOrLess;
-    };
-    d6: {
-      active: boolean;
-      about: string;
-      threshold: number;
-      over_or_less: OverOrLess;
-    };
-    d7: {
-      active: boolean;
-      about: string;
-      threshold: number;
-      over_or_less: OverOrLess;
-    };
-    d8: {
-      active: boolean;
-      about: string;
-      threshold: number;
-      over_or_less: OverOrLess;
-    };
-  };
-};
+import { Configs, OverOrLess, Lang } from '../../../src/@types/db';
 
 export class Client {
   readonly endpoint: string;
@@ -67,20 +12,24 @@ export class Client {
   }
 
   async getAll() {
-    return (await axios.get<GetAllRes>(`${this.endpoint}/api/notification/config`)).data;
+    return (await axios.get<Configs>(`${this.endpoint}/api/notification/config`)).data;
   }
 
   async updateSensor(ops: {
-    name: keyof GetAllRes['sensor'];
+    name: keyof Configs['sensor'];
     active: boolean;
     about: string;
     threshold: number;
     over_or_less: OverOrLess;
   }) {
     return (
-      await axios.put<GetAllRes>(
+      await axios.put<Configs>(
         `${this.endpoint}/api/notification/config/sensor/${ops.name}/${ops.active}/${ops.threshold}/${ops.over_or_less}/${ops.about}`
       )
     ).data;
+  }
+
+  async updateLang(type: Lang) {
+    return (await axios.put<Configs>(`${this.endpoint}/api/notification/config/lang/${type}`)).data;
   }
 }

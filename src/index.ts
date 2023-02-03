@@ -4,15 +4,20 @@ import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
 import ngrok from 'ngrok';
-import Ambient from 'ambient-lib';
+import axios from 'axios';
 // import { requestI2CAccess } from 'node-web-i2c';
 // import NPIX from '@chirimen/neopixel-i2c';
 
-import { PORT, NGROK_AUTH_TOKEN, WEB_GUI_URL, AM_CH_ID, AM_READ_KEY, AM_WRITE_KEY } from './constants/constant';
+import { TEL, PORT, NGROK_AUTH_TOKEN, WEB_GUI_URL, AM_CH_ID, AM_READ_KEY } from './constants/constant';
 import * as db from './utils/db';
-const wait = (n: number) => new Promise((resolve) => setTimeout(resolve, n));
+import { Adb } from './utils/adb';
+import { Tell } from './utils/tell';
+import { wait } from './utils/wait';
+import { LANG, OVER_OR_LESS, SensorKeys, OverOrLess } from './@types/db';
+import { AmRes } from './@types/ambient';
 
-const SYSTEM = { ngrokUrl: '' };
+const SYSTEM = { ngrokUrl: '', isActiveCalling: false };
+const SENSOR_KEYS = Object.keys(db.CONTENTS.sensor);
 
 // setup file db
 db.initFileIfNotExists();
@@ -20,6 +25,12 @@ db.reflectFromFile();
 
 // express
 const app = express();
+
+// adb
+const adb = new Adb();
+
+// tell
+const tell = new Tell();
 
 // 基本的に直接はインターネットに公開はされないプロダクトなので許可する
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -38,8 +49,8 @@ app.get('/api/notification/config', (req: express.Request, res: express.Response
 });
 
 app.put('/api/notification/config/lang/:type', (req: express.Request, res: express.Response) => {
-  if (![db.LANG.JP, db.LANG.EK].includes(req.params.name as typeof db.LANG.JP | typeof db.LANG.EK)) {
-    res.status(422).json({ message: `plz set ${db.LANG.JP} or ${db.LANG.EK} to lang` });
+  if (![LANG.JP, LANG.EN].includes(req.params.type as typeof LANG.JP | typeof LANG.EN)) {
+    res.status(422).json({ message: `plz set ${LANG.JP} or ${LANG.EN} to lang` });
     return;
   }
 
@@ -49,7 +60,7 @@ app.put('/api/notification/config/lang/:type', (req: express.Request, res: expre
 app.put(
   '/api/notification/config/sensor/:name/:active/:threshold/:over_or_less/:about',
   (req: express.Request, res: express.Response) => {
-    if (!db.SENSOR_NAMES.includes(req.params.name)) {
+    if (!SENSOR_KEYS.includes(req.params.name)) {
       res.status(404).json({ message: 'not found' });
       return;
     }
@@ -62,11 +73,11 @@ app.put(
       return;
     }
     if (
-      ![db.COMPARISON.OVER, db.COMPARISON.LESS].includes(
-        req.params.over_or_less as typeof db.COMPARISON.OVER | typeof db.COMPARISON.LESS
+      ![OVER_OR_LESS.OVER, OVER_OR_LESS.LESS].includes(
+        req.params.over_or_less as typeof OVER_OR_LESS.OVER | typeof OVER_OR_LESS.LESS
       )
     ) {
-      res.status(422).json({ message: `plz set ${db.COMPARISON.OVER} or ${db.COMPARISON.LESS} to over_or_less` });
+      res.status(422).json({ message: `plz set ${OVER_OR_LESS.OVER} or ${OVER_OR_LESS.LESS} to over_or_less` });
       return;
     }
     if (!req.params.about) {
@@ -74,25 +85,16 @@ app.put(
       return;
     }
 
-    const name = req.params.name as keyof typeof db.CONTENTS;
+    const name = req.params.name as SensorKeys;
     db.CONTENTS.sensor[name].active = req.params.active === 'true';
     db.CONTENTS.sensor[name].threshold = parseInt(req.params.threshold);
-    db.CONTENTS.sensor[name].over_or_less = req.params.over_or_less;
+    db.CONTENTS.sensor[name].over_or_less = req.params.over_or_less as OverOrLess;
     db.CONTENTS.sensor[name].about = req.params.about;
     db.saveToFile();
 
     res.status(200).json({ message: 'saved sensor!', saved: db.CONTENTS });
   }
 );
-
-// ambient
-const am = new Ambient(AM_CH_ID, AM_WRITE_KEY, AM_READ_KEY);
-const amReadLatest = () =>
-  new Promise((resolve) => {
-    am.read({ n: 1 }, (res) => {
-      resolve(res.data);
-    });
-  });
 
 // main
 (async () => {
@@ -101,21 +103,61 @@ const amReadLatest = () =>
     console.log(SYSTEM.ngrokUrl);
   });
 
+  try {
+    await adb.setDeviceIdFromCliRes();
+    await tell.checkDeviceAndChangeVolumeToMax();
+    SYSTEM.isActiveCalling = true;
+  } catch (err) {
+    console.error(err);
+    console.log('INFO: The Android/Audio call/play function is not available.');
+  }
+
   for (;;) {
     try {
-      const amLatest = (await amReadLatest())[0];
+      /**
+       * 全センサの最新の値を取得
+       */
+      const amLatest = (
+        await axios.get<AmRes>(`https://ambidata.io/api/v2/channels/${AM_CH_ID}/data?readKey=${AM_READ_KEY}&n=1`)
+      ).data[0];
 
-      const targetNames = db.SENSOR_NAMES.filter((name) => {
+      /**
+       * 家事が発生しているセンサの名前が格納される
+       */
+      const targetNames = SENSOR_KEYS.filter((name) => {
         const sensorVal = parseInt(amLatest[name]);
-        const sensorConf = db.CONTENTS.sensor[name as keyof typeof db.CONTENTS.sensor];
+        const sensorConf = db.CONTENTS.sensor[name as SensorKeys];
         return (
           sensorConf.active &&
-          ((sensorConf.over_or_less === db.COMPARISON.OVER && sensorConf.threshold <= sensorVal) ||
-            (sensorConf.over_or_less === db.COMPARISON.LESS && sensorConf.threshold >= sensorVal))
+          ((sensorConf.over_or_less === OVER_OR_LESS.OVER && sensorConf.threshold <= sensorVal) ||
+            (sensorConf.over_or_less === OVER_OR_LESS.LESS && sensorConf.threshold >= sensorVal))
         );
       });
 
-      console.log(targetNames); // 家事が発生しているセンサの名前が表示される
+      // 家事が発生してなければコンティニュー
+      if (!targetNames.length) {
+        await wait(1000);
+        continue;
+      }
+
+      /* ここから先、家事発生時の処理 */
+
+      // 架電機能有効なら架電
+      if (SYSTEM.isActiveCalling) {
+        try {
+          // 架電開始
+          const resOfCalled = await adb.call(TEL);
+          // 繋がらない場合はコンティニュー
+          if (resOfCalled === 'disconnected') {
+            await wait(1000);
+            continue;
+          }
+          // 繋がったら喋る
+          tell.tellHousework({ lang: db.CONTENTS.lang, sensorKeys: targetNames });
+        } catch (err) {
+          console.error(err);
+        }
+      }
     } catch (err) {
       console.error(err);
     }
