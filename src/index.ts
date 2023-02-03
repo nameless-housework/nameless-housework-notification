@@ -112,6 +112,9 @@ app.put(
     console.log('INFO: The Android/Audio call/play function is not available.');
   }
 
+  // wip: テストご挨拶
+  await tell.tellHousework({ lang: db.CONTENTS.lang, sensorKeys: ['d1'] });
+
   for (;;) {
     try {
       /**
@@ -153,7 +156,7 @@ app.put(
             continue;
           }
           // 繋がったら喋る
-          tell.tellHousework({ lang: db.CONTENTS.lang, sensorKeys: targetNames });
+          await tell.tellHousework({ lang: db.CONTENTS.lang, sensorKeys: targetNames });
         } catch (err) {
           console.error(err);
         }
