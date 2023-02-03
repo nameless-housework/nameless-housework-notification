@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-type OverOrLess = 'over' | 'less';
+export type OverOrLess = 'over' | 'less';
 
 export type GetAllRes = {
   lang: 'jp' | 'en';
@@ -79,7 +79,7 @@ export class Client {
   }) {
     return (
       await axios.put<GetAllRes>(
-        `${this.endpoint}'/api/notification/config/sensor/${ops.name}/${ops.active}/:${ops.threshold}/:${ops.over_or_less}/:${ops.about}`
+        `${this.endpoint}/api/notification/config/sensor/${ops.name}/${ops.active}/${ops.threshold}/${ops.over_or_less}/${ops.about}`
       )
     ).data;
   }
