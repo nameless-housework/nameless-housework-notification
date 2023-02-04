@@ -79,6 +79,7 @@ import { Configs, SensorKeys } from '../../../src/@types/db';
  * ex: https://xxx.ngrok.io
  */
 const ENDPOINT = location.search.split(/api=|&/)[1];
+console.log(ENDPOINT);
 
 // api client
 import { Client } from '@/api/client';

@@ -101,6 +101,7 @@ app.put(
   http.createServer(app).listen(PORT, async () => {
     SYSTEM.ngrokUrl = await ngrok.connect({ authtoken: NGROK_AUTH_TOKEN, addr: PORT });
     console.log(SYSTEM.ngrokUrl);
+    await adb.showQRCodeAtChrome(SYSTEM.ngrokUrl);
   });
 
   try {
@@ -153,15 +154,18 @@ app.put(
           console.log(resOfCalled);
           // 繋がらない場合はコンティニュー
           if (resOfCalled === 'disconnected') {
-            await wait(1000);
+            // 流石に電話しまくるので1分待機
+            await wait(60000);
             continue;
           }
           // 繋がったら喋る
           await tell.tellHousework({ lang: db.CONTENTS.lang, sensorKeys: targetNames });
           // 喋りきったら電話切る
           await adb.hangUp();
-          // 流石に電話しまくるので３０秒待機
-          await wait(30000);
+          // 再度 QR Code 表示
+          await adb.openChrome();
+          // 流石に電話しまくるので1分待機
+          await wait(60000);
         } catch (err) {
           console.error(err);
         }
