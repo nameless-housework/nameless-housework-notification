@@ -32,7 +32,8 @@
     "lint-vue": "cd ./vue && npm run lint",
     "start": "ts-node ./src/index.ts",
     "test": "echo 'coming soon'",
-    "watch": "nodemon ./src/index.ts"
+    "watch": "nodemon ./src/index.ts",
+    "pi": "tsc && scp -r ./dist pi@$PI:/home/pi/nameless-housework-notification/dist"
   },
   "config": {
     "commitizen": {
