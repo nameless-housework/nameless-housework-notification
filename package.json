@@ -27,13 +27,14 @@
     "commit": "git cz",
     "doc": "typedoc --plugin typedoc-plugin-markdown --out ./docs/ ./src/*.ts && madge --image ./docs/map.svg ./src/index.ts",
     "ignore": "curl https://raw.githubusercontent.com/github/gitignore/master/Node.gitignore -o ./.gitignore",
+    "js": "node ./dist/index.js",
     "lint": "npm run lint-api && npm run lint-vue",
     "lint-api": "npx sort-package-json && tsc --noEmit && eslint './src/**/*.ts' --config ./.eslintrc.js --no-ignore --color --fix",
     "lint-vue": "cd ./vue && npm run lint",
+    "pi": "tsc && scp -r ./dist pi@$PI:/home/pi/nameless-housework-notification/dist",
     "start": "ts-node ./src/index.ts",
     "test": "echo 'coming soon'",
-    "watch": "nodemon ./src/index.ts",
-    "pi": "tsc && scp -r ./dist pi@$PI:/home/pi/nameless-housework-notification/dist"
+    "watch": "nodemon ./src/index.ts"
   },
   "config": {
     "commitizen": {

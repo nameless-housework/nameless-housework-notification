@@ -1,6 +1,9 @@
+import util from 'util';
 import { spawn } from 'child_process';
+import * as childProcess from 'child_process';
 import { wait } from '../utils/wait';
 
+const exec = util.promisify(childProcess.exec);
 const ADB = 'adb';
 
 export class Adb {
@@ -23,6 +26,7 @@ export class Adb {
   }
 
   async call(tel: string): Promise<'connected' | 'disconnected'> {
+    console.log('calling...');
     const procOfCall = spawn(ADB, [
       '-s',
       this.deviceId,
@@ -56,6 +60,8 @@ export class Adb {
      */
     const callingStatus = { val: '0', countOfCheck: 0 };
     while (callingStatus.val !== '1') {
+      console.log(`callingStatus.val = ${callingStatus.val}`);
+      console.log(`callingStatus.countOfCheck = ${callingStatus.countOfCheck}`);
       const procOfCheckCallingStatus = spawn(ADB, ['shell', 'dumpsys', 'telephony.registry']);
       const resOfCheckCallingStatus = await new Promise((resolve, reject) => {
         procOfCheckCallingStatus.stdout.on('data', (data) => {
@@ -78,9 +84,17 @@ export class Adb {
       await wait(1000);
 
       // 10秒待って電話に出なかったら不在ということで通話状況確認を終了する
-      if (++callingStatus.countOfCheck === 10) break;
+      if (++callingStatus.countOfCheck === 10) {
+        console.log('calling timeout');
+        break;
+      }
     }
 
     return callingStatus.val === '1' ? 'connected' : 'disconnected';
+  }
+
+  async hangUp() {
+    console.log('hanging up...');
+    await exec(`${ADB} -s ${this.deviceId} shell input keyevent KEYCODE_ENDCALL`);
   }
 }

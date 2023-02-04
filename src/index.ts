@@ -111,9 +111,7 @@ app.put(
     console.error(err);
     console.log('INFO: The Android/Audio call/play function is not available.');
   }
-
-  // wip: テストご挨拶
-  await tell.tellHousework({ lang: db.CONTENTS.lang, sensorKeys: ['d1'] });
+  console.log(`SYSTEM.isActiveCalling = ${SYSTEM.isActiveCalling}`);
 
   for (;;) {
     try {
@@ -123,6 +121,7 @@ app.put(
       const amLatest = (
         await axios.get<AmRes>(`https://ambidata.io/api/v2/channels/${AM_CH_ID}/data?readKey=${AM_READ_KEY}&n=1`)
       ).data[0];
+      console.log(amLatest);
 
       /**
        * 家事が発生しているセンサの名前が格納される
@@ -136,6 +135,7 @@ app.put(
             (sensorConf.over_or_less === OVER_OR_LESS.LESS && sensorConf.threshold >= sensorVal))
         );
       });
+      console.log(targetNames);
 
       // 家事が発生してなければコンティニュー
       if (!targetNames.length) {
@@ -150,6 +150,7 @@ app.put(
         try {
           // 架電開始
           const resOfCalled = await adb.call(TEL);
+          console.log(resOfCalled);
           // 繋がらない場合はコンティニュー
           if (resOfCalled === 'disconnected') {
             await wait(1000);
@@ -157,6 +158,10 @@ app.put(
           }
           // 繋がったら喋る
           await tell.tellHousework({ lang: db.CONTENTS.lang, sensorKeys: targetNames });
+          // 喋りきったら電話切る
+          await adb.hangUp();
+          // 流石に電話しまくるので３０秒待機
+          await wait(30000);
         } catch (err) {
           console.error(err);
         }

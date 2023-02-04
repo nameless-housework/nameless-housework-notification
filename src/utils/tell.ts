@@ -1,6 +1,8 @@
-import { spawn } from 'child_process';
+import util from 'util';
+import * as childProcess from 'child_process';
 import { Lang } from '../@types/db';
 
+const exec = util.promisify(childProcess.exec);
 const AUDIO_DIR = `${__dirname}/../../audio`;
 
 export class Tell {
@@ -15,17 +17,8 @@ export class Tell {
     if (process.platform !== 'linux') {
       return;
     }
-    const proc = spawn('amixer', ['-c', '1', 'set', 'Speaker', '100%']);
-    const EXIT_ZERO = 'exit 0';
-    const resOfChangedVolume = await new Promise((resolve, reject) => {
-      proc.stdout.on('data', () => {
-        resolve(EXIT_ZERO);
-      });
-      proc.stdout.on('error', (err) => {
-        reject(err);
-      });
-    });
-    this.active = resOfChangedVolume === EXIT_ZERO;
+    const resOfAmixer = await exec('amixer -c 1 set Speaker 100%');
+    this.active = !!resOfAmixer.stdout;
   }
 
   isActive(): boolean {
@@ -33,18 +26,17 @@ export class Tell {
   }
 
   async tellHousework(ops: { lang: Lang; sensorKeys: string[] }) {
+    console.log('telling...');
     await this.play(`${AUDIO_DIR}/${ops.lang}_hello.wav`);
+    for (const sensorKey of ops.sensorKeys) {
+      await this.play(`${AUDIO_DIR}/${ops.lang}_${sensorKey.split('')[1]}.wav`);
+      await this.play(`${AUDIO_DIR}/${ops.lang}_while.wav`);
+    }
+    await this.play(`${AUDIO_DIR}/${ops.lang}_end.wav`);
   }
 
   private async play(path: string): Promise<void> {
-    const proc = spawn('aplay', ['--device="sysdefault:CARD=Device"', path]);
-    await new Promise((resolve, reject) => {
-      proc.stdout.on('data', (data) => {
-        resolve(data);
-      });
-      proc.stdout.on('error', (err) => {
-        reject(err);
-      });
-    });
+    console.log(`play... ${path}`);
+    await exec(`aplay --device="sysdefault:CARD=Device" ${path}`);
   }
 }
