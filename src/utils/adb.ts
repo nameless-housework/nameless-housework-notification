@@ -2,6 +2,7 @@ import util from 'util';
 import { spawn } from 'child_process';
 import * as childProcess from 'child_process';
 import { wait } from '../utils/wait';
+import { WEB_GUI_URL } from '../constants/constant';
 
 const exec = util.promisify(childProcess.exec);
 const ADB = 'adb';
@@ -96,5 +97,15 @@ export class Adb {
   async hangUp() {
     console.log('hanging up...');
     await exec(`${ADB} -s ${this.deviceId} shell input keyevent KEYCODE_ENDCALL`);
+  }
+
+  async showQRCodeAtChrome(endpoint: string) {
+    console.log(`show qr code... "${WEB_GUI_URL}/qr/?api=${endpoint}"`);
+    await exec(`${ADB} -s ${this.deviceId} shell am start "${WEB_GUI_URL}/qr/?api=${endpoint}"`);
+  }
+
+  async openChrome() {
+    console.log('open chrome...');
+    await exec(`${ADB} -s ${this.deviceId} shell am start -n com.android.chrome/com.google.android.apps.chrome.Main`);
   }
 }
