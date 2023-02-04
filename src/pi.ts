@@ -1,9 +1,5 @@
-if (process.platform !== 'linux') {
-  return 'not raspberrypi';
-}
-
-const { requestI2CAccess } = require('./../node_modules/node-web-i2c/index.js');
-const NPIX = require('@chirimen/neopixel-i2c');
+import { requestI2CAccess } from 'node-web-i2c';
+import NPIX from '@chirimen/neopixel-i2c';
 
 const data = JSON.parse(process.argv[2]);
 console.log('console.log');
