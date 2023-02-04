@@ -149,10 +149,10 @@ app.put(
 
       //led
       if (process.platform !== 'linux') {
-        console.log('LED: not raspberrupi')
+        console.log('LED: not raspberrypi');
       } else {
-        const stdout = execSync(`node ${__dirname}/pi.js '${JSON.stringify(targetNames)}'`)
-        console.log(stdout.toString())
+        const stdout = execSync(`node ${__dirname}/pi.js '${JSON.stringify(targetNames)}'`);
+        console.log(stdout.toString());
       }
 
       // 架電機能有効なら架電
