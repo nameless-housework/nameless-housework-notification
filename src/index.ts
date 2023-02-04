@@ -148,6 +148,7 @@ app.put(
       /* ここから先、家事発生時の処理 */
 
       //led
+      console.log(__dirname)
       try {
         if (process.platform !== 'linux') {
           console.log('LED: not raspberrypi');

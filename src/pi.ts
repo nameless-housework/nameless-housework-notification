@@ -1,4 +1,4 @@
-import { requestI2CAccess } from 'node-web-i2c';
+import { requestI2CAccess } from "../node_modules/node-web-i2c/index.js";;
 import NPIX from '@chirimen/neopixel-i2c';
 
 const data = JSON.parse(process.argv[2]);
