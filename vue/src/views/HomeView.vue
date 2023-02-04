@@ -8,6 +8,9 @@
       のFチームが<br />開発した家事が発生したことを教えてくれるシステムです！
     </p>
 
+    <VueQrcode v-if="ENDPOINT" :value="ENDPOINT" :options="{ width: 300 }" />
+    <p :class="$style.qr">こちらの QR コードをスキャンすることで<br />通知設定ができます！</p>
+
     <div v-if="!ENDPOINT" :class="$style.left">
       <p>
         ⚠ 通信に必要なパラメータがありません。Raspberry Pi 等の画面に表示された QR
@@ -55,8 +58,6 @@
           </el-col>
         </el-row>
       </el-card>
-      <VueQrcode :value="ENDPOINT" :options="{ width: 300 }" />
-      <p>こちらの QR コードをスキャンすることで<br />通知設定ができます！</p>
     </div>
 
     <div :id="$style.footer">
@@ -244,5 +245,9 @@ $WIDTH: 336px;
 
 .right {
   text-align: right;
+}
+
+.qr {
+  margin-bottom: 50px;
 }
 </style>
