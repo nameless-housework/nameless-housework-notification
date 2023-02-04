@@ -64,7 +64,7 @@
       </el-button>
       <el-select :id="$style.lang" v-model="state.lang">
         <el-option @click="changeLang" label="JP" value="jp" />
-        <el-option @click="changeLang" label="EK" value="ek" />
+        <el-option @click="changeLang" label="EN" value="en" />
       </el-select>
     </div>
   </div>
@@ -73,6 +73,7 @@
 <script lang="ts">
 import { defineComponent, reactive } from 'vue';
 import { TrendCharts, UploadFilled, Memo } from '@element-plus/icons-vue';
+import { Configs, SensorKeys } from '../../../src/@types/db';
 
 /**
  * ex: https://xxx.ngrok.io
@@ -80,7 +81,7 @@ import { TrendCharts, UploadFilled, Memo } from '@element-plus/icons-vue';
 const ENDPOINT = location.search.split(/api=|&/)[1];
 
 // api client
-import { Client, GetAllRes, OverOrLess } from '@/api/client';
+import { Client } from '@/api/client';
 
 // components
 import * as notification from '@/components/notification';
@@ -100,52 +101,52 @@ export default defineComponent({
           active: false,
           about: '',
           threshold: 0,
-          over_or_less: '' as OverOrLess,
+          over_or_less: '',
         },
         d2: {
           active: false,
           about: '',
           threshold: 0,
-          over_or_less: '' as OverOrLess,
+          over_or_less: '',
         },
         d3: {
           active: false,
           about: '',
           threshold: 0,
-          over_or_less: '' as OverOrLess,
+          over_or_less: '',
         },
         d4: {
           active: false,
           about: '',
           threshold: 0,
-          over_or_less: '' as OverOrLess,
+          over_or_less: '',
         },
         d5: {
           active: false,
           about: '',
           threshold: 0,
-          over_or_less: '' as OverOrLess,
+          over_or_less: '',
         },
         d6: {
           active: false,
           about: '',
           threshold: 0,
-          over_or_less: '' as OverOrLess,
+          over_or_less: '',
         },
         d7: {
           active: false,
           about: '',
           threshold: 0,
-          over_or_less: '' as OverOrLess,
+          over_or_less: '',
         },
         d8: {
           active: false,
           about: '',
           threshold: 0,
-          over_or_less: '' as OverOrLess,
+          over_or_less: '',
         },
       },
-    });
+    } as Configs);
     const client = new Client(ENDPOINT);
 
     if (!ENDPOINT) {
@@ -156,7 +157,7 @@ export default defineComponent({
       });
     }
 
-    const reflectResToState = (res: GetAllRes) => {
+    const reflectResToState = (res: Configs) => {
       state.lang = res.lang;
       state.sensor = res.sensor;
     };
@@ -166,7 +167,7 @@ export default defineComponent({
       reflectResToState(res);
     })();
 
-    const save = async (key: 'd1' | 'd2' | 'd3' | 'd4' | 'd5' | 'd6' | 'd7' | 'd8') => {
+    const save = async (key: SensorKeys) => {
       if (!state.sensor[key].about) {
         notification.error({ title: 'エラー', message: 'メモを入力してください' });
         return;
@@ -179,8 +180,9 @@ export default defineComponent({
       notification.success({ title: '成功', message: '保存しました' });
     };
 
-    const changeLang = () => {
-      notification.success({ title: '成功', message: `言語を${state.lang}に変更しました` });
+    const changeLang = async () => {
+      await client.updateLang(state.lang);
+      notification.success({ title: '成功', message: `言語を ${state.lang} に変更しました` });
     };
 
     return {
