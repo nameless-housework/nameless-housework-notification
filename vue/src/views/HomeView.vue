@@ -55,6 +55,8 @@
           </el-col>
         </el-row>
       </el-card>
+      <VueQrcode :value="ENDPOINT" :options="{ width: 300 }" />
+      <p>こちらの QR コードをスキャンすることで<br />通知設定ができます！</p>
     </div>
 
     <div :id="$style.footer">
@@ -73,6 +75,7 @@
 <script lang="ts">
 import { defineComponent, reactive } from 'vue';
 import { TrendCharts, UploadFilled, Memo } from '@element-plus/icons-vue';
+import VueQrcode from '@chenfengyuan/vue-qrcode';
 import { Configs, SensorKeys } from '../../../src/@types/db';
 
 /**
@@ -93,6 +96,7 @@ export default defineComponent({
     TrendCharts,
     UploadFilled,
     Memo,
+    VueQrcode,
   },
   setup() {
     const state = reactive({
