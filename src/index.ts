@@ -154,7 +154,8 @@ app.put(
           console.log(resOfCalled);
           // 繋がらない場合はコンティニュー
           if (resOfCalled === 'disconnected') {
-            await wait(1000);
+            // 流石に電話しまくるので1分待機
+            await wait(60000);
             continue;
           }
           // 繋がったら喋る

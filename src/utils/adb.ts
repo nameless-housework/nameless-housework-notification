@@ -100,8 +100,8 @@ export class Adb {
   }
 
   async showQRCodeAtChrome(endpoint: string) {
-    console.log('show qr code...');
-    await exec(`${ADB} -s ${this.deviceId} shell am start ${WEB_GUI_URL}/?api=${endpoint}&qr=true`);
+    console.log(`show qr code... "${WEB_GUI_URL}/qr/?api=${endpoint}"`);
+    await exec(`${ADB} -s ${this.deviceId} shell am start "${WEB_GUI_URL}/qr/?api=${endpoint}"`);
   }
 
   async openChrome() {

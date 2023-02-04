@@ -8,11 +8,7 @@
       のFチームが<br />開発した家事が発生したことを教えてくれるシステムです！
     </p>
 
-    <div v-if="FLAG_QR">
-      <VueQrcode :value="ENDPOINT" :options="{ width: 300 }" />
-      <p>こちらの QR コードをスキャンすることで<br />通知設定ができます！</p>
-    </div>
-    <div v-else-if="!ENDPOINT" :class="$style.left">
+    <div v-if="!ENDPOINT" :class="$style.left">
       <p>
         ⚠ 通信に必要なパラメータがありません。Raspberry Pi 等の画面に表示された QR
         コードをスキャンしてアクセスしてください。
@@ -77,7 +73,6 @@
 <script lang="ts">
 import { defineComponent, reactive } from 'vue';
 import { TrendCharts, UploadFilled, Memo } from '@element-plus/icons-vue';
-import VueQrcode from '@chenfengyuan/vue-qrcode';
 import { Configs, SensorKeys } from '../../../src/@types/db';
 
 /**
@@ -85,12 +80,6 @@ import { Configs, SensorKeys } from '../../../src/@types/db';
  */
 const ENDPOINT = location.search.split(/api=|&/)[1];
 console.log(ENDPOINT);
-
-/**
- * これが true なら ENDPOINT を QR コードにしたものを表示する
- */
-const FLAG_QR = location.search.includes('qr=true');
-console.log('flag_qr', FLAG_QR);
 
 // api client
 import { Client } from '@/api/client';
@@ -104,7 +93,6 @@ export default defineComponent({
     TrendCharts,
     UploadFilled,
     Memo,
-    VueQrcode,
   },
   setup() {
     const state = reactive({
@@ -204,7 +192,6 @@ export default defineComponent({
       changeLang,
       location,
       ENDPOINT,
-      FLAG_QR,
     };
   },
 });
