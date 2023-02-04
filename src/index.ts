@@ -151,7 +151,7 @@ app.put(
       if (process.platform !== 'linux') {
         console.log('LED: not raspberrypi');
       } else {
-        const stdout = execSync(`npx ts-node ./pi.ts '${JSON.stringify(targetNames)}'`);
+        const stdout = execSync(`node ./pi.js '${JSON.stringify(targetNames)}'`);
         console.log(stdout.toString());
       }
 
