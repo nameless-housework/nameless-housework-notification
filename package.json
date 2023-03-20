@@ -47,7 +47,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "ngrok": "^4.3.3",
-    "node-web-i2c": "^1.1.23",
+    "node-web-i2c": "^1.1.27",
     "ts-node": "^10.6.0"
   },
   "devDependencies": {
